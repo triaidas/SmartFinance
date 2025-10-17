@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smartfinance
+    container_name: smartfinance-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      # Ensure SQLite database persistence
+      - ./database:/var/www/database
+    networks:
+      - smartfinance
+
+  # Nginx Service
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: smartfinance-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - smartfinance
+
+networks:
+  smartfinance:
+    driver: bridge

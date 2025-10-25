@@ -25,7 +25,7 @@ class PreferencesController extends Controller
     {
         $validated = $request->validate([
             'currency' => ['required', 'string', 'max:10'],
-            'budget_goal' => ['nullable', 'numeric', 'min:0'],
+            'buget_goal' => ['nullable', 'numeric', 'min:0'],
         ]);
 
         $request->user()->fill($validated);

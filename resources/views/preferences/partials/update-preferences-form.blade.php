@@ -35,16 +35,16 @@
         <div>
             <x-input-label for="budget_goal" :value="__('Budget Goal')" />
             <x-text-input
-                id="budget_goal"
-                name="budget_goal"
+                id="buget_goal"
+                name="buget_goal"
                 type="number"
                 step="0.01"
                 min="0"
                 class="mt-1 block w-full"
-                :value="old('budget_goal', $user->budget_goal)"
+                :value="old('buget_goal', $user->buget_goal)"
                 placeholder="Enter your monthly budget goal"
             />
-            <x-input-error :messages="$errors->get('budget_goal')" class="mt-2" />
+            <x-input-error :messages="$errors->get('buget_goal')" class="mt-2" />
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 {{ __('Set your monthly budget goal to track your spending.') }}
             </p>

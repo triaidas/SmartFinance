@@ -9,35 +9,41 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Monthly Overview -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">{{ __('Monthly Overview') }}</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('Income') }}</p>
-                            <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ number_format($monthlyIncome, 2) }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('Expenses') }}</p>
-                            <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{ number_format(abs($monthlyExpenses), 2) }}</p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Charts Section -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Transaction Trends Chart -->
+                        <!-- Left section: Monthly Overview -->
                         <div>
-                            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">{{ __('Transaction Trends') }}</h3>
-                            <div id="transactionTrendsChart" class="w-full" style="min-height: 300px;"></div>
+                            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">{{ __('Monthly Overview') }}</h3>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('Income') }}</p>
+                                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ number_format($monthlyIncome, 2) }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('Expenses') }}</p>
+                                    <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{ number_format(abs($monthlyExpenses), 2) }}</p>
+                                </div>
+                            </div>
+
                         </div>
-                        <!-- Distribution Chart -->
+
+                        <!-- Right section: Income vs Expenses chart -->
                         <div>
                             <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">{{ __('Income vs Expenses') }}</h3>
                             <div id="distributionChart" class="w-full" style="min-height: 300px;"></div>
                         </div>
                     </div>
                 </div>
+
+
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">{{ __('Transaction Trends') }}</h3>
+                        <div id="transactionTrendsChart" class="w-full" style="min-height: 300px;"></div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Recent Transactions -->
@@ -106,7 +112,8 @@
                     },
                     animations: {
                         enabled: true
-                    }
+                    },
+                    background: 'transparent',
                 },
                 series: [{
                     name: 'Balance',
@@ -116,14 +123,14 @@
                     categories: trends.map(t => t.month),
                     labels: {
                         style: {
-                            colors: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#4b5563'
+                            colors: '#9ca3af'
                         }
                     }
                 },
                 yaxis: {
                     labels: {
                         style: {
-                            colors: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#4b5563'
+                            colors: '#9ca3af'
                         }
                     }
                 },
@@ -133,10 +140,10 @@
                     width: 3
                 },
                 theme: {
-                    mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+                    mode: 'dark'
                 },
                 grid: {
-                    borderColor: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+                    borderColor: '#374151'
                 }
             };
 
@@ -147,19 +154,25 @@
                     height: 300,
                     animations: {
                         enabled: true
-                    }
+                    },
+                    background: 'transparent',
                 },
                 series: distribution.map(item => item.value),
                 labels: distribution.map(item => item.label),
                 colors: ['#22C55E', '#EF4444'],  // Green for income, red for expenses
                 theme: {
-                    mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+                    mode: 'dark'
                 },
                 legend: {
                     position: 'bottom',
                     labels: {
-                        colors: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#4b5563'
+                        colors: '#9ca3af'
                     }
+                },
+                stroke: {
+                    show: true,
+                    width: 1,
+                    colors: 'black'  // Black outline
                 },
                 plotOptions: {
                     pie: {

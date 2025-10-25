@@ -51,12 +51,6 @@
                         <input type="hidden" id="hiddenCategory" name="category" value="{{ TransactionCategory::INCOME->value }}" disabled>
 
                         <div>
-                            <x-input-label for="payment_method" :value="__('Payment Method')" />
-                            <x-text-input id="payment_method" name="payment_method" type="text" class="mt-1 block w-full" :value="old('payment_method', $transaction->payment_method)" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('payment_method')" />
-                        </div>
-
-                        <div>
                             <x-input-label for="amount" :value="__('Amount')" />
                             <x-text-input id="amount" name="amount" type="number" step="0.01" min="0.01" class="mt-1 block w-full" :value="old('amount', abs($transaction->amount))" required placeholder="Enter amount" />
                             <x-input-error class="mt-2" :messages="$errors->get('amount')" />
@@ -87,13 +81,13 @@
             const categorySelect = document.getElementById('category');
             const hiddenCategory = document.getElementById('hiddenCategory');
             const descriptionElement = document.getElementById('categoryDescription');
-            
+
             function handleTypeChange() {
                 const isIncome = typeSelect.value === 'income';
                 categoryContainer.style.display = isIncome ? 'none' : 'block';
                 categorySelect.disabled = isIncome;
                 hiddenCategory.disabled = !isIncome;
-                
+
                 if (isIncome) {
                     categorySelect.removeAttribute('required');
                     hiddenCategory.setAttribute('required', 'required');
@@ -102,9 +96,9 @@
                     hiddenCategory.removeAttribute('required');
                 }
             }
-            
+
             typeSelect.addEventListener('change', handleTypeChange);
-            
+
             categorySelect.addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
                 descriptionElement.textContent = selectedOption.title || '';

@@ -47,14 +47,6 @@
                                             @endif
                                         </a>
                                     </th>
-                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left">
-                                        <a href="{{ route('transactions.index', ['sort' => 'payment_method', 'direction' => $sort === 'payment_method' && $direction === 'asc' ? 'desc' : 'asc']) }}" class="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hover:text-gray-700 dark:hover:text-gray-100">
-                                            {{ __('Payment Method') }}
-                                            @if ($sort === 'payment_method')
-                                                <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
-                                            @endif
-                                        </a>
-                                    </th>
                                     <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-right">
                                         <a href="{{ route('transactions.index', ['sort' => 'amount', 'direction' => $sort === 'amount' && $direction === 'asc' ? 'desc' : 'asc']) }}" class="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hover:text-gray-700 dark:hover:text-gray-100">
                                             {{ __('Amount') }}
@@ -79,9 +71,6 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                                             {{ __($transaction->category->value) }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                                            {{ $transaction->payment_method }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-right {{ $transaction->amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
                                             {{ number_format($transaction->amount, 2) }}

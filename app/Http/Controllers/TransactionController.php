@@ -30,7 +30,7 @@ class TransactionController extends Controller
         $sort = $request->get('sort', 'date');
         $direction = $request->get('direction', 'desc');
 
-        $allowedSorts = ['date', 'type', 'category', 'payment_method', 'amount'];
+        $allowedSorts = ['date', 'type', 'category', 'amount'];
         if (in_array($sort, $allowedSorts)) {
             $query->orderBy($sort, $direction);
         }
@@ -74,7 +74,6 @@ class TransactionController extends Controller
                 'Date',
                 'Type',
                 'Category',
-                'Payment Method',
                 'Amount',
             ]);
 
@@ -84,7 +83,6 @@ class TransactionController extends Controller
                     $transaction->date->format('Y-m-d'),
                     $transaction->type,
                     $transaction->category->value,
-                    $transaction->payment_method,
                     number_format($transaction->amount, 2, '.', ''),
                 ]);
             }

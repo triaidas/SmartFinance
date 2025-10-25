@@ -27,7 +27,6 @@ class TransactionRequest extends FormRequest
             'date' => ['required', 'date'],
             'type' => ['required', 'string', 'in:income,expense'],
             'category' => ['required', new Enum(TransactionCategory::class)],
-            'payment_method' => ['required', 'string', 'max:255'],
             'amount' => ['required', 'numeric', 'gt:0'],
             'description' => ['nullable', 'string', 'max:1000'],
         ];

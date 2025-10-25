@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PreferencesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,10 @@ Route::middleware('auth')->group(function () {
         ->except(['show']);
     Route::get('/transactions/export/csv', [App\Http\Controllers\TransactionController::class, 'export'])
         ->name('transactions.export');
+
+    Route::get('/preferences', [PreferencesController::class, 'edit'])->name('preferences.edit');
+    Route::patch('/preferences', [PreferencesController::class, 'update'])->name('preferences.update');
 });
+
 
 require __DIR__.'/auth.php';

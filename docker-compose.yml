@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smartfinance
+    container_name: smartfinance-app
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/var/www
+      # Ensure SQLite database persistence
+      - ./database:/var/www/database
+    environment:
+      - APP_ENV=${APP_ENV:-production}
+      - APP_URL=${APP_URL:-http://localhost:8000}

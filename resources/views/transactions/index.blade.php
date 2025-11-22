@@ -4,9 +4,14 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Transactions') }}
             </h2>
-            <a href="{{ route('transactions.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                {{ __('Add Transaction') }}
-            </a>
+            <div class="space-x-4">
+                <a href="{{ route('transactions.export') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                    {{ __('Export CSV') }}
+                </a>
+                <a href="{{ route('transactions.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                    {{ __('Add Transaction') }}
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -42,14 +47,6 @@
                                             @endif
                                         </a>
                                     </th>
-                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left">
-                                        <a href="{{ route('transactions.index', ['sort' => 'payment_method', 'direction' => $sort === 'payment_method' && $direction === 'asc' ? 'desc' : 'asc']) }}" class="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hover:text-gray-700 dark:hover:text-gray-100">
-                                            {{ __('Payment Method') }}
-                                            @if ($sort === 'payment_method')
-                                                <span class="ml-1">{{ $direction === 'asc' ? '↑' : '↓' }}</span>
-                                            @endif
-                                        </a>
-                                    </th>
                                     <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-right">
                                         <a href="{{ route('transactions.index', ['sort' => 'amount', 'direction' => $sort === 'amount' && $direction === 'asc' ? 'desc' : 'asc']) }}" class="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hover:text-gray-700 dark:hover:text-gray-100">
                                             {{ __('Amount') }}
@@ -73,13 +70,10 @@
                                             {{ __(ucfirst($transaction->type)) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                                            {{ $transaction->category }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                                            {{ $transaction->payment_method }}
+                                            {{ __($transaction->category->value) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-right {{ $transaction->amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                            {{ number_format($transaction->amount, 2) }}
+                                            {{ number_format($transaction->amount, 2) }} {{ $currency }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{ route('transactions.edit', $transaction) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-200">{{ __('Edit') }}</a>

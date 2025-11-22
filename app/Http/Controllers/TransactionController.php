@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TransactionCategory;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use App\Models\User;
@@ -29,14 +30,15 @@ class TransactionController extends Controller
         $sort = $request->get('sort', 'date');
         $direction = $request->get('direction', 'desc');
 
-        $allowedSorts = ['date', 'type', 'category', 'payment_method', 'amount'];
+        $allowedSorts = ['date', 'type', 'category', 'amount'];
         if (in_array($sort, $allowedSorts)) {
             $query->orderBy($sort, $direction);
         }
 
         $transactions = $query->paginate(15);
+        $currency = $user->currency;
 
-        return view('transactions.index', compact('transactions', 'sort', 'direction'));
+        return view('transactions.index', compact('transactions', 'sort', 'direction', 'currency'));
     }
 
     /**
@@ -44,7 +46,52 @@ class TransactionController extends Controller
      */
     public function create(): View
     {
-        return view('transactions.create');
+        $categories = TransactionCategory::cases();
+        return view('transactions.create', compact('categories'));
+    }
+
+    /**
+     * Export transactions to CSV
+     */
+    public function export(): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $transactions = $user->transactions()->orderBy('date', 'desc')->get();
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="transactions.csv"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $callback = function() use ($transactions) {
+            $handle = fopen('php://output', 'w');
+
+            // Add CSV headers
+            fputcsv($handle, [
+                'Date',
+                'Type',
+                'Category',
+                'Amount',
+            ]);
+
+            // Add data rows
+            foreach ($transactions as $transaction) {
+                fputcsv($handle, [
+                    $transaction->date->format('Y-m-d'),
+                    $transaction->type,
+                    $transaction->category->value,
+                    number_format($transaction->amount, 2, '.', ''),
+                ]);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**
@@ -67,8 +114,9 @@ class TransactionController extends Controller
     public function edit(Transaction $transaction): View
     {
         $this->authorize('update', $transaction);
+        $categories = TransactionCategory::cases();
 
-        return view('transactions.edit', compact('transaction'));
+        return view('transactions.edit', compact('transaction', 'categories'));
     }
 
     /**
